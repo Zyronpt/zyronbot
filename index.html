@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Avançado de Previsão</title>
+    <style>
+        body {
+            font-family: "Courier New", monospace;
+            background-color: #0d0d0d;
+            color: #00ff99;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #painel {
+            width: 90%;
+            max-width: 1000px;
+            margin-top: 50px;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 2px #00ff99;
+        }
+        h1 {
+            color: #00ff99;
+            text-align: center;
+            font-size: 24px;
+        }
+        .secao {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #121212;
+            border: 1px solid #00ff99;
+            border-radius: 5px;
+        }
+        .secao h2 {
+            font-size: 18px;
+            color: #00ff99;
+            margin-bottom: 10px;
+        }
+        #quadro-previsao {
+            text-align: center;
+            font-size: 20px;
+            padding: 15px;
+            background-color: #0b3d3d;
+            border: 2px solid #00ff99;
+            border-radius: 5px;
+            color: #00ff99;
+        }
+        .dados {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .dados div {
+            width: 48%;
+            background-color: #333333;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            color: #00ff99;
+        }
+        .blink {
+            animation: blink 1s steps(5, start) infinite;
+        }
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+        #grafico {
+            margin-top: 20px;
+            width: 100%;
+            height: 200px;
+        }
+        .monitor-servidor {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .servidor {
+            width: 32%;
+            padding: 15px;
+            background-color: #252525;
+            color: #00ff99;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .servidor-premium {
+            width: 100%;
+            padding: 15px;
+            background-color: #0b3d3d;
+            color: #00ff99;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="painel">
+        <h1>Sistema Avançado de Previsão Aviator Vs1 - Zyron</h1>
+        <div id="quadro-previsao" class="secao">
+            <h2>Previsão da Próxima Rodada</h2>
+            <div id="previsao-valor" class="blink">Calculando...</div>
+        </div>
+        <div class="secao">
+            <h2>Dados de Monitoramento</h2>
+            <div class="dados">
+                <div id="monitor-1">Taxa de Crescimento: <span class="blink">--%</span></div>
+                <div id="monitor-2">Estabilidade: <span class="blink">--%</span></div>
+            </div>
+            <div class="dados">
+                <div id="monitor-3">Frequência: <span class="blink">-- Hz</span></div>
+                <div id="monitor-4">Última Análise: <span class="blink">-- ms</span></div>
+                <div id="taxa-acerto">Taxa de Acerto: <span class="blink">--%</span></div>
+            </div>
+        </div>
+        <div class="secao">
+            <h2>Gestão de Frequência em Tempo Real</h2>
+            <canvas id="grafico"></canvas>
+        </div>
+        <div class="secao">
+            <h2>Servidores Ativos</h2>
+            <div class="monitor-servidor">
+                <div class="servidor" id="servidor-88">Servidor 88<br>Status: <span class="blink">Ativo</span></div>
+                <div class="servidor" id="servidor-41">Servidor 41<br>Status: <span class="blink">Ativo</span></div>
+            </div>
+            <div class="servidor-premium" id="servidor-premium">
+                Servidor Premium - Histórico de Transações<br>
+                <div id="historico-transacoes"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let gerarTempoAleatorio = () => Math.floor(Math.random() * (180000 - 120000 + 1)) + 120000;
+        let gerarPrevisao = () => ((Math.random() * (3.26 - 1.01)) + 1.01).toFixed(2) + "x";
+
+        let atualizarPrevisao = () => { 
+            document.getElementById("previsao-valor").innerText = `Próximo valor: ${gerarPrevisao()}`; 
+            setTimeout(() => {
+                document.getElementById("previsao-valor").classList.add("blink");
+                let tempoEspera = gerarTempoAleatorio();
+                setTimeout(atualizarPrevisao, tempoEspera);
+            }, 30000);
+            document.getElementById("previsao-valor").classList.remove("blink");
+        };
+
+        let atualizarDadosMonitoramento = () => {
+            document.getElementById("monitor-1").innerHTML = `Taxa de Crescimento: ${(Math.random() * 100).toFixed(2)}%`;
+            document.getElementById("monitor-2").innerHTML = `Estabilidade: ${(Math.random() * 100).toFixed(2)}%`;
+            document.getElementById("monitor-3").innerHTML = `Frequência: ${(Math.random() * 60 + 40).toFixed(1)} Hz`;
+            document.getElementById("monitor-4").innerHTML = `Última Análise: ${(Math.random() * 200).toFixed(1)} ms`;
+            let taxaAcerto = (Math.random() * (100 - 29) + 29).toFixed(2) + "%"; // Varia de 29% a 100%
+            document.getElementById("taxa-acerto").innerHTML = `Taxa de Acerto: ${taxaAcerto}`;
+        };
+
+        let atualizarGrafico = () => {
+            let grafico = document.getElementById('grafico');
+            let ctx = grafico.getContext('2d');
+            grafico.width = grafico.parentElement.offsetWidth;
+            grafico.height = 200;
+            let dados = Array(50).fill(50);
+            setInterval(() => {
+                let novoDado = Math.random() * 100;
+                dados.push(novoDado);
+                if (dados.length > 50) dados.shift();
+                ctx.clearRect(0, 0, grafico.width, grafico.height);
+                ctx.beginPath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#00ff99';
+                ctx.moveTo(0, grafico.height - dados[0]);
+                dados.forEach((valor, index) => {
+                    ctx.lineTo((grafico.width / 50) * index, grafico.height - valor);
+                });
+                ctx.stroke();
+            }, 500);
+        };
+
+        let adicionarHistoricoTransacoes = () => {
+            let historico = document.getElementById("historico-transacoes");
+            let transacao = `Transação de €${(Math.random() * 50 + 20).toFixed(2)} processada<br>`;
+            historico.innerHTML = transacao + historico.innerHTML;
+            if (historico.innerHTML.split("<br>").length > 10) {
+                historico.innerHTML = historico.innerHTML.split("<br>").slice(0, 10).join("<br>");
+            }
+        };
+
+        setInterval(atualizarDadosMonitoramento, 2000);
+        setInterval(adicionarHistoricoTransacoes, 9000);
+        atualizarGrafico();
+        setTimeout(atualizarPrevisao, gerarTempoAleatorio());
+    </script>
+</body>
+</html>
